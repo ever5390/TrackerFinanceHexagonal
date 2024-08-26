@@ -2,9 +2,9 @@ package com.erosalesp.trackerfinancehex.application.account.service;
 
 import com.erosalesp.trackerfinancehex.application.account.ports.input.AccountServicePort;
 import com.erosalesp.trackerfinancehex.application.account.ports.output.AccountPersistencePort;
-import com.erosalesp.trackerfinancehex.domain.account.exceptions.AccountInitialBalanceErrorFound;
-import com.erosalesp.trackerfinancehex.domain.account.exceptions.AccountNotFoundError;
-import com.erosalesp.trackerfinancehex.domain.account.exceptions.DuplicatedAccountError;
+import com.erosalesp.trackerfinancehex.domain.account.exceptions.AccountInitialBalanceException;
+import com.erosalesp.trackerfinancehex.domain.account.exceptions.AccountNotFoundException;
+import com.erosalesp.trackerfinancehex.domain.account.exceptions.DuplicatedAccountException;
 import com.erosalesp.trackerfinancehex.domain.account.models.constants.ConstErrorAccount;
 import com.erosalesp.trackerfinancehex.domain.account.models.entity.Account;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +33,7 @@ public class AccountService implements AccountServicePort {
     private void validateDuplicatedAccountByName(String accountName) {
         Account accountDuplicated = accountPersistencePort.findByAccountName(accountName);
         if(accountDuplicated != null) {
-            throw new DuplicatedAccountError(String.format(ConstErrorAccount.ACCOUNT_DUPLICATED_FOUND, accountName));
+            throw new DuplicatedAccountException(String.format(ConstErrorAccount.ACCOUNT_DUPLICATED_FOUND, accountName));
         }
     }
 
@@ -41,7 +41,7 @@ public class AccountService implements AccountServicePort {
     public Account findById(String idAccount) {
         return accountPersistencePort.findById(idAccount)
                 .orElseThrow(() ->
-                        new AccountNotFoundError(String.format(ConstErrorAccount.ACCOUNT_NOT_FOUND, idAccount)));
+                        new AccountNotFoundException(String.format(ConstErrorAccount.ACCOUNT_NOT_FOUND, idAccount)));
     }
 
     @Override
@@ -58,7 +58,7 @@ public class AccountService implements AccountServicePort {
     public Account update(String idAccount, Account account) {
 
         Account accountFound = accountPersistencePort.findById(idAccount).orElseThrow(()->
-                new AccountNotFoundError(String.format(ConstErrorAccount.ACCOUNT_NOT_FOUND, idAccount)));
+                new AccountNotFoundException(String.format(ConstErrorAccount.ACCOUNT_NOT_FOUND, idAccount)));
 
         BigDecimal newInitialBalance = getInitialBalanceUpdated(account, accountFound);
 
@@ -76,7 +76,7 @@ public class AccountService implements AccountServicePort {
         BigDecimal newInitialBalance = amountInitialExist.add(amountDifference);
 
         if(newInitialBalance.compareTo(BigDecimal.ZERO)<= 0) {
-            throw new AccountInitialBalanceErrorFound(ConstErrorAccount.ACOUNT_INITIAL_BALANCE_ERROR_FOUND);
+            throw new AccountInitialBalanceException(ConstErrorAccount.ACOUNT_INITIAL_BALANCE_ERROR_FOUND);
         }
 
         return newInitialBalance;
@@ -86,7 +86,7 @@ public class AccountService implements AccountServicePort {
     public void deleteById(String id) {
 
         if(accountPersistencePort.findById(id).isEmpty()) {
-            throw new AccountNotFoundError(String.format(ConstErrorAccount.ACCOUNT_NOT_FOUND, id));
+            throw new AccountNotFoundException(String.format(ConstErrorAccount.ACCOUNT_NOT_FOUND, id));
         }
 
         accountPersistencePort.deleteById(id);

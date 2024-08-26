@@ -20,9 +20,10 @@ public class Transaction {
     private BigDecimal amount;
     private LocalDateTime createAt;
     private String description;
-    private String codeTransfer;
     private Account account;
-    private Account accountDestiny;
-    private BalanceFlow BalanceFlow;
     private OperationType operationType;
+
+    private Account accountDestiny;
+    private String codeTransfer;
+    private BalanceFlow BalanceFlow;
 }

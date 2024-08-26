@@ -17,6 +17,7 @@ public class AccountPersistenceMapperImpl implements AccountPersistenceMapper{
         }
 
         AccountEntity accountEntity = new AccountEntity();
+        accountEntity.setId(accountDomain.getId());
         accountEntity.setAccountName(accountDomain.getAccountName());
         accountEntity.setCurrentBalance(accountDomain.getCurrentBalance());
         accountEntity.setInitialBalance(accountDomain.getInitialBalance());

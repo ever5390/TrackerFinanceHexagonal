@@ -20,7 +20,6 @@ public class TransactionRestMapperImpl implements TransactionRestMapper {
         transactionDomain.setDescription(transactionCreateRequest.getDescription());
         transactionDomain.setAccount(transactionCreateRequest.getAccount());
         transactionDomain.setAccountDestiny(transactionCreateRequest.getAccountDestiny());
-        transactionDomain.setBalanceFlow(transactionCreateRequest.getBalanceFlow());
         transactionDomain.setOperationType(transactionCreateRequest.getOperationType());
 
         return transactionDomain;

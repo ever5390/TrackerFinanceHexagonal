@@ -1,8 +1,8 @@
 package com.erosalesp.trackerfinancehex.infrastructure.adapters.transaction.input.model.request;
 
 import com.erosalesp.trackerfinancehex.domain.account.models.entity.Account;
-import com.erosalesp.trackerfinancehex.domain.transaction.models.enums.BalanceFlow;
 import com.erosalesp.trackerfinancehex.domain.transaction.models.enums.OperationType;
+import com.erosalesp.trackerfinancehex.infrastructure.adapters.transaction.input.model.enumvalidation.ValidOperationType;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -30,14 +30,9 @@ public class TransactionCreateRequest {
     @NotNull(message = "Account origin field cannot be null")
     private Account account;
 
-    @NotNull(message = "Account destiny field cannot be null")
     private Account accountDestiny;
 
-    @NotNull(message = "Operation finance cannot be null")
-    @NotBlank(message = "Operation field cannot be empty or null")
-    private BalanceFlow BalanceFlow;
-
     @NotNull(message = "Operation type field cannot be null")
-    @NotBlank(message = "Operation type field cannot be empty or null")
     private OperationType operationType;
+
 }

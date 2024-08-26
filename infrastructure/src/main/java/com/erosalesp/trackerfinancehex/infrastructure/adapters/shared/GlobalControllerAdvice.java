@@ -1,13 +1,15 @@
 package com.erosalesp.trackerfinancehex.infrastructure.adapters.shared;
 
-import com.erosalesp.trackerfinancehex.domain.account.exceptions.AccountInitialBalanceErrorFound;
-import com.erosalesp.trackerfinancehex.domain.account.exceptions.AccountInsuficientBalanceError;
-import com.erosalesp.trackerfinancehex.domain.account.exceptions.AccountNotFoundError;
-import com.erosalesp.trackerfinancehex.domain.account.exceptions.DuplicatedAccountError;
+import com.erosalesp.trackerfinancehex.domain.account.exceptions.AccountInitialBalanceException;
+import com.erosalesp.trackerfinancehex.domain.transaction.exception.TransactionAccountInsuficientBalanceException;
+import com.erosalesp.trackerfinancehex.domain.account.exceptions.AccountNotFoundException;
+import com.erosalesp.trackerfinancehex.domain.account.exceptions.DuplicatedAccountException;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -22,8 +24,8 @@ public class GlobalControllerAdvice {
 
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
-    @ExceptionHandler(AccountNotFoundError.class)
-    public ErrorResponse handleAccountNotFound(AccountNotFoundError error) {
+    @ExceptionHandler(AccountNotFoundException.class)
+    public ErrorResponse handleAccountNotFound(AccountNotFoundException error) {
         LOGGER.error(error.getMessage());
         return ErrorResponse.builder()
                 .code(HttpStatus.NOT_FOUND.toString())
@@ -32,8 +34,8 @@ public class GlobalControllerAdvice {
                 .build();
     }
 
-    @ExceptionHandler(AccountInsuficientBalanceError.class)
-    public ErrorResponse handleAccountInsuficientBalance(AccountInsuficientBalanceError error) {
+    @ExceptionHandler(TransactionAccountInsuficientBalanceException.class)
+    public ErrorResponse handleAccountInsuficientBalance(TransactionAccountInsuficientBalanceException error) {
         LOGGER.error(error.getMessage());
         return ErrorResponse.builder()
                 .code(HttpStatus.BAD_REQUEST.toString())
@@ -42,8 +44,8 @@ public class GlobalControllerAdvice {
                 .build();
     }
 
-    @ExceptionHandler(DuplicatedAccountError.class)
-    public ErrorResponse duplicatedAccountError(DuplicatedAccountError error) {
+    @ExceptionHandler(DuplicatedAccountException.class)
+    public ErrorResponse duplicatedAccountError(DuplicatedAccountException error) {
         LOGGER.error(error.getMessage());
         return ErrorResponse.builder()
                 .code(HttpStatus.BAD_REQUEST.toString())
@@ -52,8 +54,8 @@ public class GlobalControllerAdvice {
                 .build();
     }
 
-    @ExceptionHandler(AccountInitialBalanceErrorFound.class)
-    public ErrorResponse handleAccountInitialBalanceErrorFound(AccountInitialBalanceErrorFound error) {
+    @ExceptionHandler(AccountInitialBalanceException.class)
+    public ErrorResponse handleAccountInitialBalanceErrorFound(AccountInitialBalanceException error) {
         LOGGER.error(error.getMessage());
         return ErrorResponse.builder()
                 .code(HttpStatus.NOT_FOUND.toString())
